@@ -1,7 +1,8 @@
 name: Production
 on:
   push:
-    branches: *
+    branches:
+      - '*'
 
 jobs:
   pre-deploy:
