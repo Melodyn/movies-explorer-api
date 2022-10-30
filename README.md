@@ -1,8 +1,10 @@
+[![Production](../../actions/workflows/backend.yml/badge.svg?branch=main)](../../actions/workflows/backend.yml?query=workflow%3A"Production")
+
 # Дипломный проект Практикум веб-10
 
 Сервис, в котором можно найти фильмы по запросу и сохранить в личном кабинете.
 
-* Backend: https://api.diploma.melodyn.nomoredomains.icu/movies
+* Backend: https://api.diploma.melodyn.nomoredomains.icu
 
 ## Технологии
 
