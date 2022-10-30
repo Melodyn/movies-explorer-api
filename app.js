@@ -7,9 +7,10 @@ import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import winston from 'winston';
 import winstonExpress from 'express-winston';
-import { errors, isCelebrateError } from 'celebrate';
 // modules
 import { HTTPError } from './errors/index.js';
 import { router } from './routes/index.js';
@@ -50,8 +51,8 @@ export const run = async (envName) => {
   });
 
   const allowedOrigins = [
-    'http://project.melodyn.nomoredomains.icu',
-    'https://project.melodyn.nomoredomains.icu',
+    'http://diploma.melodyn.nomoredomains.icu',
+    'https://diploma.melodyn.nomoredomains.icu',
   ];
 
   const app = express();
@@ -64,13 +65,12 @@ export const run = async (envName) => {
       allowedHeaders: ['Content-Type', 'Authorization'],
     },
   ));
-
-  app.use(errors());
+  app.use(helmet());
+  app.use(rateLimit());
   app.use(router);
   app.use(errorLogger);
   app.use((err, req, res, next) => {
     const isHttpError = err instanceof HTTPError;
-    const isValidatorError = isCelebrateError(err);
     const isModelError = (err.name === 'ValidationError') || (err.name === 'CastError');
 
     if (isHttpError) {
@@ -83,7 +83,7 @@ export const run = async (envName) => {
         message: `Переданы некоректные данные. ${err.message}`,
       });
     }
-    if (!(isHttpError || isModelError || isValidatorError)) {
+    if (!(isHttpError || isModelError)) {
       res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({
         message: err.message || 'Неизвестная ошибка',
       });

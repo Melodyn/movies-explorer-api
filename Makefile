@@ -12,9 +12,9 @@ run: mongo-run
 prod:
 	chmod +x ./bin/index.js && npm run start
 pm2-prod:
-	NODE_ENV=production $(PM2) start backend --wait-ready
+	NODE_ENV=production $(PM2) start diploma-backend --wait-ready
 pm2-stop:
-	$(PM2) stop backend
+	$(PM2) stop diploma-backend
 
 # dev
 lint:
@@ -26,7 +26,7 @@ mongo-stop:
 
 release: build deploy
 build:
-	rsync -a --exclude node_modules --exclude api-tests . ./build
+	rsync -a --exclude node_modules --exclude api-tests --exclude .git --exclude .idea . ./build
 	cd build && NODE_ENV=production npm ci
 deploy:
 	ssh $(REMOTE) 'cd $(DIR_BACKEND) && make pm2-stop'
