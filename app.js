@@ -11,8 +11,8 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import winston from 'winston';
 import winstonExpress from 'express-winston';
+import { errors } from 'celebrate';
 // modules
-import { HTTPError } from './errors/index.js';
 import { router } from './routes/index.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -56,38 +56,26 @@ export const run = async (envName) => {
   ];
 
   const app = express();
-  app.set('config', config);
-  app.use(requestLogger);
-  app.use(bodyParser.json());
+  app.use(rateLimit({
+    message: { error: 'Слишком много запросов' },
+  }));
   app.use(cors(
     {
       origin: config.IS_PROD ? allowedOrigins : '*',
       allowedHeaders: ['Content-Type', 'Authorization'],
     },
   ));
+  app.set('config', config);
+  app.use(bodyParser.json());
+  app.use(requestLogger);
   app.use(helmet());
-  app.use(rateLimit());
   app.use(router);
   app.use(errorLogger);
+  app.use(errors());
   app.use((err, req, res, next) => {
-    const isHttpError = err instanceof HTTPError;
-    const isModelError = (err.name === 'ValidationError') || (err.name === 'CastError');
-
-    if (isHttpError) {
-      res.status(err.statusCode).send({
-        message: err.message,
-      });
-    }
-    if (isModelError) {
-      res.status(constants.HTTP_STATUS_BAD_REQUEST).send({
-        message: `Переданы некоректные данные. ${err.message}`,
-      });
-    }
-    if (!(isHttpError || isModelError)) {
-      res.status(constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({
-        message: err.message || 'Неизвестная ошибка',
-      });
-    }
+    const statusCode = err.statusCode || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    const message = err.message || 'Неизвестная ошибка';
+    res.status(statusCode).send({ message });
     next();
   });
 

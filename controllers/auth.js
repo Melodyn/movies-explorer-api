@@ -31,13 +31,10 @@ export const login = (req, res, next) => {
 };
 
 export const register = (req, res, next) => {
-  const user = new User(req.body);
-  user.validate()
-    .then(() => bcrypt.hash(req.body.password, 10))
+  bcrypt.hash(req.body.password, 10)
     .then((hash) => {
-      user.password = hash;
-
-      return user.save();
+      req.body.password = hash;
+      return User.create(req.body);
     })
     .then((document) => {
       const { password: removed, ...fields } = document.toObject();

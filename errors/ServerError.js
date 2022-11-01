@@ -3,6 +3,6 @@ import { HTTPError } from './HTTPError.js';
 
 export class ServerError extends HTTPError {
   constructor(message = '') {
-    super(`Неизвестная ошибка. ${message}`, constants.HTTP_STATUS_SERVICE_UNAVAILABLE);
+    super(`Неизвестная ошибка. ${message}`, constants.HTTP_STATUS_INTERNAL_SERVER_ERROR);
   }
 }

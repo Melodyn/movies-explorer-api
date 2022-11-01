@@ -8,8 +8,10 @@ import { router as authRouter } from './auth.js';
 export const router = new Router();
 
 router.use('/', authRouter);
-router.use('/users', auth, userRouter);
-router.use('/movies', auth, movieRouter);
+
+router.use(auth);
+router.use('/users', userRouter);
+router.use('/movies', movieRouter);
 
 router.use((req, res, next) => {
   next(new NotFoundError('Запрашиваемая страница не найдена'));

@@ -18,7 +18,7 @@ Authorization: {{user1_token}}
   "trailerLink": "https://trailerLink",
   "thumbnail": "https://thumbnail",
   "owner": "635e71c809a5478ee3b4221d",
-  "movieId": "635e71c809a5478ee3b4221d",
+  "movieId": 1,
   "nameRU": "nameRU",
   "nameEN": "nameEN"
 }

@@ -1,7 +1,15 @@
 import mongoose from 'mongoose';
-import { urlRegex } from '../utils/constants.js';
+import { schemaLink } from '../validators/movies.js';
 
 const { Schema } = mongoose;
+const schemaLinkMongoose = {
+  type: String,
+  required: true,
+  validate: {
+    validator: (value) => !schemaLink.validate(value).error,
+    message: () => 'Ссылка должна быть http(s)-URL',
+  },
+};
 
 const schema = new Schema({
   country: {
@@ -30,38 +38,18 @@ const schema = new Schema({
     required: true,
     minLength: 2,
   },
-  image: {
-    type: String,
-    required: true,
-    validate: {
-      validator: (value) => urlRegex.test(value),
-      message: () => 'Ссылка должна быть http(s)-URL',
-    },
-  },
-  trailerLink: {
-    type: String,
-    required: true,
-    validate: {
-      validator: (value) => urlRegex.test(value),
-      message: () => 'Ссылка должна быть http(s)-URL',
-    },
-  },
-  thumbnail: {
-    type: String,
-    required: true,
-    validate: {
-      validator: (value) => urlRegex.test(value),
-      message: () => 'Ссылка должна быть http(s)-URL',
-    },
-  },
+  image: schemaLinkMongoose,
+  trailerLink: schemaLinkMongoose,
+  thumbnail: schemaLinkMongoose,
   owner: {
     type: Schema.ObjectId,
     ref: 'User',
     required: true,
   },
   movieId: {
-    type: Schema.ObjectId,
+    type: Number,
     required: true,
+    min: 1,
   },
   nameRU: {
     type: String,

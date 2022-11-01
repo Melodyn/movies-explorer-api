@@ -28,10 +28,7 @@ export const read = (req, res, next) => {
 
 export const create = (req, res, next) => {
   req.body.owner = req.user._id;
-  const movie = new Movie(req.body);
-
-  movie.validate()
-    .then(() => movie.save())
+  Movie.create(req.body)
     .then((newMovie) => {
       res.send(newMovie);
     })
@@ -54,7 +51,7 @@ export const remove = (req, res, next) => {
       } else if (movie.owner.toString() !== req.user._id) {
         throw forbiddenError;
       } else {
-        return Movie.findByIdAndDelete(req.params.id);
+        return movie.remove();
       }
     })
     .then((movie) => {

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { emailRegex } from '../utils/constants.js';
 import { UnauthorizedError } from '../errors/index.js';
+import { schemaEmail } from '../validators/users.js';
 
 const { Schema } = mongoose;
 
@@ -19,7 +19,7 @@ const schema = new Schema({
     required: true,
     unique: true,
     validate: {
-      validator: (value) => emailRegex.test(value),
+      validator: (value) => !schemaEmail.validate(value).error,
       message: () => 'Почта должна быть вида a@b.c',
     },
   },
@@ -32,8 +32,8 @@ const schema = new Schema({
 }, {
   versionKey: false,
   statics: {
-    findOneAndValidatePassword({ password, ...where }) {
-      return this.findOne(where)
+    findOneAndValidatePassword({ password, email }) {
+      return this.findOne({ email })
         .select('+password')
         .then((user) => {
           if (!user) {

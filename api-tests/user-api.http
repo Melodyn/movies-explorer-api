@@ -9,7 +9,7 @@ Content-Type: application/json
 Authorization: {{user1_token}}
 
 {
-    "email": "a@b.c",
+    "email": "a@b.com",
     "name": "Меместо"
 }
 
