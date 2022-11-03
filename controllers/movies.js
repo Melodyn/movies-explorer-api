@@ -5,12 +5,13 @@ import {
   NotFoundError,
   ServerError,
   ForbiddenError,
+  messages,
 } from '../errors/index.js';
 
 const buildErrorServer = (message) => new ServerError(message);
-const notFoundError = new NotFoundError('Запрашиваемый фильм не найден');
-const forbiddenError = new ForbiddenError('Это действие выполнить можно только со своими записями');
-const buildErrorBadRequest = (message) => new BadRequestError(`Некорректные данные для фильма. ${message}`);
+const notFoundError = new NotFoundError(messages.movie.notFound);
+const forbiddenError = new ForbiddenError(messages.movie.anotherOwner);
+const buildErrorBadRequest = (message) => new BadRequestError(`${messages.movie.validation} ${message}`);
 
 export const read = (req, res, next) => {
   Movie.find({ owner: req.user._id })

@@ -16,7 +16,6 @@ export const schemaObjectMovie = Joi.object({
   image: schemaLink,
   trailerLink: schemaLink,
   thumbnail: schemaLink,
-  owner: schemaObjectId,
   movieId: Joi.number().min(1).required(),
   nameRU: Joi.string().min(2).required(),
   nameEN: Joi.string().min(2).required(),

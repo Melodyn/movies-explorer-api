@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { UnauthorizedError } from '../errors/index.js';
+import { UnauthorizedError, NotFoundError } from '../errors/index.js';
 import { schemaEmail } from '../validators/users.js';
 
 const { Schema } = mongoose;
 
-const unauthorizedError = new UnauthorizedError('Пользователь с такими данными не найден');
+const notFoundError = new NotFoundError('Неправильная почта или пароль');
+const unauthorizedError = new UnauthorizedError('Неправильная почта или пароль');
 
 const schema = new Schema({
   name: {
@@ -37,7 +38,7 @@ const schema = new Schema({
         .select('+password')
         .then((user) => {
           if (!user) {
-            throw unauthorizedError;
+            throw notFoundError;
           }
 
           return bcrypt.compare(password, user.password)

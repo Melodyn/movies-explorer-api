@@ -4,6 +4,7 @@ import { auth } from '../middlewares/auth.js';
 import { router as userRouter } from './users.js';
 import { router as movieRouter } from './movies.js';
 import { router as authRouter } from './auth.js';
+import { messages } from '../errors/index.js';
 
 export const router = new Router();
 
@@ -14,5 +15,5 @@ router.use('/users', userRouter);
 router.use('/movies', movieRouter);
 
 router.use((req, res, next) => {
-  next(new NotFoundError('Запрашиваемая страница не найдена'));
+  next(new NotFoundError(messages.app.noPage));
 });

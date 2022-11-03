@@ -5,12 +5,13 @@ import {
   NotFoundError,
   ServerError,
   ConflictError,
+  messages,
 } from '../errors/index.js';
 
-const notFoundError = new NotFoundError('Запрашиваемый пользователь не найден');
-const conflictError = new ConflictError('Данные принадлежат другому пользователю');
+const notFoundError = new NotFoundError(messages.user.notFound);
+const conflictError = new ConflictError(messages.user.conflict);
 const buildErrorServer = (message) => new ServerError(message);
-const buildErrorBadRequest = (message) => new BadRequestError(`Некорректные данные для пользователя. ${message}`);
+const buildErrorBadRequest = (message) => new BadRequestError(`${messages.user.validation} ${message}`);
 
 export const read = (req, res, next) => {
   User.findById(req.user._id)

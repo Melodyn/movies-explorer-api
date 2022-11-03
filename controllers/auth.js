@@ -6,17 +6,18 @@ import {
   BadRequestError,
   ConflictError,
   ServerError,
+  messages, mongoNotUniqueCode,
 } from '../errors/index.js';
 
 const buildErrorServer = (message) => new ServerError(message);
-const errorNotUnique = new ConflictError('Пользователь с такой почтой уже существует');
-const buildErrorBadRequest = (message) => new BadRequestError(`Некорректные данные для пользователя. ${message}`);
+const errorNotUnique = new ConflictError(messages.user.alreadyExist);
+const buildErrorBadRequest = (message) => new BadRequestError(`${messages.user.validation} ${message}`);
 
 export const login = (req, res, next) => {
   User.findOneAndValidatePassword(req.body)
     .then((userData) => {
-      const { JWT_SECRET } = req.app.get('config');
-      const token = jwt.sign({ _id: userData._id }, JWT_SECRET, { expiresIn: '1w' });
+      const { JWT_SECRET, JWT_EXPIRES } = req.app.get('config');
+      const token = jwt.sign({ _id: userData._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES });
       res.send({ token });
     })
     .catch((err) => {
@@ -43,7 +44,7 @@ export const register = (req, res, next) => {
     .catch((err) => {
       if (err instanceof HTTPError) {
         next(err);
-      } else if (err.code === 11000) {
+      } else if (err.code === mongoNotUniqueCode) {
         next(errorNotUnique);
       } else if (err.name === 'ValidationError') {
         next(buildErrorBadRequest(err.message));

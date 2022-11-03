@@ -2,6 +2,7 @@ POST {{host}}/signin
 Content-Type: application/json
 
 {
+    "email": "aa@bb.com",
     "password": "password"
 }
 

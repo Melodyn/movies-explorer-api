@@ -1,5 +1,4 @@
 import path from 'path';
-import { constants } from 'http2';
 import { fileURLToPath } from 'url';
 // libs
 import dotenv from 'dotenv';
@@ -14,6 +13,8 @@ import winstonExpress from 'express-winston';
 import { errors } from 'celebrate';
 // modules
 import { router } from './routes/index.js';
+import { messages } from './errors/index.js';
+import { error as errorMiddleware } from './middlewares/index.js';
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,7 +29,7 @@ export const run = async (envName) => {
     path: path.resolve(__dirname, (isProduction ? '.env' : '.env.common')),
   }).parsed;
   if (!config) {
-    throw new Error('Config not found');
+    throw new Error(messages.app.configNotFound);
   }
   config.NODE_ENV = envName;
   config.IS_PROD = isProduction;
@@ -57,7 +58,7 @@ export const run = async (envName) => {
 
   const app = express();
   app.use(rateLimit({
-    message: { error: 'Слишком много запросов' },
+    message: { message: messages.app.rateLimit },
   }));
   app.use(cors(
     {
@@ -72,12 +73,7 @@ export const run = async (envName) => {
   app.use(router);
   app.use(errorLogger);
   app.use(errors());
-  app.use((err, req, res, next) => {
-    const statusCode = err.statusCode || constants.HTTP_STATUS_INTERNAL_SERVER_ERROR;
-    const message = err.message || 'Неизвестная ошибка';
-    res.status(statusCode).send({ message });
-    next();
-  });
+  app.use(errorMiddleware);
 
   mongoose.set('runValidators', true);
   await mongoose.connect(config.DB_URL);
