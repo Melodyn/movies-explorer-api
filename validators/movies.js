@@ -1,8 +1,15 @@
 import { Joi, Segments } from 'celebrate';
+import validator from 'validator';
 import { celebrate, schemaObjectId } from './common.js';
+import { messages } from '../errors/index.js';
 
 export const schemaRouteId = schemaObjectId;
-export const schemaLink = Joi.string().uri({ scheme: ['http', 'https'] }).required();
+export const schemaLink = Joi.string().custom((value, helpers) => {
+  if (validator.isURL(value, { protocols: ['http', 'https'] })) {
+    return value;
+  }
+  return helpers.message(messages.app.notURL);
+}).required();
 
 export const schemaObjectRouteId = Joi.object({
   id: schemaRouteId,

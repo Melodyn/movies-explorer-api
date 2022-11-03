@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { schemaLink } from '../validators/movies.js';
+import { messages } from '../errors/index.js';
 
 const { Schema } = mongoose;
 const schemaLinkMongoose = {
@@ -7,7 +8,7 @@ const schemaLinkMongoose = {
   required: true,
   validate: {
     validator: (value) => !schemaLink.validate(value).error,
-    message: () => 'Ссылка должна быть http(s)-URL',
+    message: () => messages.app.notURL,
   },
 };
 

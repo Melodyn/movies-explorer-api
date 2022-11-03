@@ -15,6 +15,7 @@ export const messages = {
     rateLimit: 'Слишком много запросов',
     unauthorized: 'Необходима авторизация',
     noPage: 'Запрашиваемая страница не найдена',
+    notURL: 'Ссылка должна быть http(s)-URL',
   },
   user: {
     alreadyExist: 'Пользователь с такой почтой уже существует',
