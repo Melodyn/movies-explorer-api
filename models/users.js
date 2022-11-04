@@ -2,11 +2,12 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { UnauthorizedError, NotFoundError } from '../errors/index.js';
 import { schemaEmail } from '../validators/users.js';
+import { messages } from '../errors/index.js';
 
 const { Schema } = mongoose;
 
-const notFoundError = new NotFoundError('Неправильная почта или пароль');
-const unauthorizedError = new UnauthorizedError('Неправильная почта или пароль');
+const notFoundError = new NotFoundError(messages.user.incorrect);
+const unauthorizedError = new UnauthorizedError(messages.user.incorrect);
 
 const schema = new Schema({
   name: {
@@ -21,7 +22,7 @@ const schema = new Schema({
     unique: true,
     validate: {
       validator: (value) => !schemaEmail.validate(value).error,
-      message: () => 'Почта должна быть вида a@b.c',
+      message: () => messages.app.notEmail,
     },
   },
   password: {
