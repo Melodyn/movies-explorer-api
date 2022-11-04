@@ -1,0 +1,46 @@
+{
+  "name": "@melodyn/practicum-diploma-backend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Practicum diploma backend",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "dev": "NODE_ENV=development nodemon --ignore api-tests/ ./bin/index.js",
+    "start": "NODE_ENV=production ./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Melodyn/movies-explorer-api.git"
+  },
+  "keywords": [],
+  "author": "Sergei Melodyn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Melodyn/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/Melodyn/movies-explorer-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
+    "celebrate": "^15.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.6.0",
+    "express-winston": "^4.2.0",
+    "helmet": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.0",
+    "validator": "^13.7.0",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "nodemon": "^2.0.20"
+  }
+}

@@ -1,0 +1,20 @@
+POST {{host}}/signin
+Content-Type: application/json
+
+{
+    "email": "aa@bb.com",
+    "password": "password"
+}
+
+###
+
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+    "email": "aa@bb.com",
+    "password": "password",
+    "name": "user1"
+}
+
+###
