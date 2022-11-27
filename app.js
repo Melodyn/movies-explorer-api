@@ -57,15 +57,15 @@ export const run = async (envName) => {
   ];
 
   const app = express();
-  app.use(rateLimit({
-    message: { message: messages.app.rateLimit },
-  }));
   app.use(cors(
     {
       origin: config.IS_PROD ? allowedOrigins : '*',
       allowedHeaders: ['Content-Type', 'Authorization'],
     },
   ));
+  app.use(rateLimit({
+    message: { message: messages.app.rateLimit },
+  }));
   app.set('config', config);
   app.use(bodyParser.json());
   app.use(requestLogger);

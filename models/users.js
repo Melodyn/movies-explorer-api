@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { UnauthorizedError, NotFoundError } from '../errors/index.js';
+import { UnauthorizedError, NotFoundError, messages } from '../errors/index.js';
 import { schemaEmail } from '../validators/users.js';
-import { messages } from '../errors/index.js';
 
 const { Schema } = mongoose;
 
