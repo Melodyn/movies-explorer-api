@@ -65,6 +65,7 @@ export const run = async (envName) => {
   ));
   app.use(rateLimit({
     message: { message: messages.app.rateLimit },
+    max: 100,
   }));
   app.set('config', config);
   app.use(bodyParser.json());
