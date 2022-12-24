@@ -52,8 +52,8 @@ export const run = async (envName) => {
   });
 
   const allowedOrigins = [
-    'http://diploma.melodyn.nomoredomains.icu',
-    'https://diploma.melodyn.nomoredomains.icu',
+    'http://diploma.melodyn.nomoredomains.club',
+    'https://diploma.melodyn.nomoredomains.club',
   ];
 
   const app = express();

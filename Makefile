@@ -1,6 +1,6 @@
-REMOTE=melodyn@51.250.0.137
+REMOTE=melodyn@84.201.152.223
 DIR_BACKEND=/home/melodyn/diploma/backend
-PM2=/home/melodyn/.asdf/shims/pm2
+PM2=/usr/bin/pm2
 
 setup: install-dependencies mongo-run run
 install-dependencies:
@@ -12,9 +12,9 @@ run: mongo-run
 prod:
 	chmod +x ./bin/index.js && npm run start
 pm2-prod:
-	NODE_ENV=production $(PM2) start diploma-backend --wait-ready
+	$(PM2) start pm2.config.cjs --wait-ready
 pm2-stop:
-	$(PM2) stop diploma-backend
+	$(PM2) stop pm2.config.cjs
 
 # dev
 lint:
